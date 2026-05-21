@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>India Quiz Forest Game</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(to top, #87ceeb, #e0f7ff);
+    overflow: hidden;
+}
+
+/* BACKGROUND LAYER */
+.background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+/* CLOUDS */
+.cloud {
+    position: absolute;
+    background: white;
+    border-radius: 50px;
+    opacity: 0.7;
+    animation: move 25s linear infinite;
+}
+
+.cloud1 { width: 120px; height: 60px; top: 60px; left: -200px; }
+.cloud2 { width: 160px; height: 70px; top: 140px; left: -300px; }
+
+@keyframes move {
+    from { transform: translateX(0); }
+    to { transform: translateX(140vw); }
+}
+
+/* TREE */
+.tree {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.trunk {
+    width: 40px;
+    height: 180px;
+    background: #8b5a2b;
+    margin: auto;
+    border-radius: 10px;
+}
+
+.leaves {
+    width: 220px;
+    height: 220px;
+    background: green;
+    border-radius: 50%;
+    position: absolute;
+    top: -120px;
+    left: -90px;
+}
+
+/* FOREGROUND UI (IMPORTANT FIX) */
+.ui {
+    position: relative;
+    z-index: 10;
+}
+
+/* SCORE */
+.scoreboard {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    z-index: 20;
+}
+
+/* QUESTION (FIXED VISIBILITY) */
+.question {
+    position: absolute;
+    top: 30px;
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: #111;
+    z-index: 20;
+}
+
+/* OPTIONS */
+.option {
+    position: absolute;
+    background: white;
+    padding: 12px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    font-weight: bold;
+    transition: 0.3s;
+    z-index: 20;
+}
+
+.option:hover {
+    transform: scale(1.1);
+}
+
+/* TREE OPTION POSITIONS */
+.opt1 { top: 180px; left: 35%; }
+.opt2 { top: 140px; left: 60%; }
+.opt3 { top: 220px; left: 55%; }
+.opt4 { top: 200px; left: 40%; }
+
+/* RESULT */
+.result {
+    position: absolute;
+    bottom: 150px;
+    width: 100%;
+    text-align: center;
+    font-size: 60px;
+    z-index: 20;
+}
+</style>
+</head>
+
+<body>
+
+<div class="background">
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+
+    <div class="tree">
+        <div class="leaves"></div>
+        <div class="trunk"></div>
+    </div>
+</div>
+
+<div class="ui">
+
+    <div class="scoreboard">
+        Score: <span id="score">0</span>
+    </div>
+
+    <div class="question" id="question">
+        Loading question...
+    </div>
+
+    <div class="option opt1" onclick="selectAnswer(0)"></div>
+    <div class="option opt2" onclick="selectAnswer(1)"></div>
+    <div class="option opt3" onclick="selectAnswer(2)"></div>
+    <div class="option opt4" onclick="selectAnswer(3)"></div>
+
+    <div class="result" id="result"></div>
+
+</div>
+
+<script>
+
+const questions = [
+    { q: "Capital of India?", a: ["Mumbai","Delhi","Kolkata","Chennai"], correct: 1 },
+    { q: "National animal of India?", a: ["Lion","Tiger","Elephant","Leopard"], correct: 1 },
+    { q: "National bird of India?", a: ["Crow","Peacock","Sparrow","Pigeon"], correct: 1 },
+    { q: "Currency of India?", a: ["Dollar","Rupee","Euro","Yen"], correct: 1 },
+    { q: "India independence year?", a: ["1947","1950","1930","1960"], correct: 0 },
+    { q: "National flower?", a: ["Rose","Lotus","Lily","Sunflower"], correct: 1 }
+];
+
+let current;
+let score = 0;
+
+function loadQuestion() {
+    let index = Math.floor(Math.random() * questions.length);
+    current = questions[index];
+
+    document.getElementById("question").innerText = current.q;
+
+    document.querySelector(".opt1").innerText = current.a[0];
+    document.querySelector(".opt2").innerText = current.a[1];
+    document.querySelector(".opt3").innerText = current.a[2];
+    document.querySelector(".opt4").innerText = current.a[3];
+
+    document.getElementById("result").innerHTML = "";
+}
+
+function selectAnswer(i) {
+    let result = document.getElementById("result");
+
+    if (i === current.correct) {
+        score++;
+        document.getElementById("score").innerText = score;
+        result.innerHTML = "✔";
+        result.style.color = "green";
+    } else {
+        result.innerHTML = "✖";
+        result.style.color = "red";
+    }
+
+    setTimeout(loadQuestion, 900);
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
